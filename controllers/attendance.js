@@ -12,7 +12,7 @@ module.exports = {
   async punchList (ctx) {
     const plugin = strapi.plugins.attendance;
     const uid = ctx.state.user.id;
-    const entities = await plugin.models['attendance-record'].find({ person: uid }).limit(40);
+    const entities = await plugin.models['attendance-record'].find({ person: uid }).limit(40).sort({ _id: -1 });
     ctx.send(entities);
   },
 
