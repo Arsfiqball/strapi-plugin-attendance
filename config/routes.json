@@ -1,0 +1,28 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/punch/list",
+      "handler": "attendance.punchList",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/punch/in",
+      "handler": "attendance.punchIn",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/punch/out/:id",
+      "handler": "attendance.punchOut",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

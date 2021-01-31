@@ -1,0 +1,47 @@
+{
+  "kind": "collectionType",
+  "collectionName": "attendance_records",
+  "info": {
+    "name": "attendance-record",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false,
+    "timestamps": false,
+    "increments": true,
+    "comment": ""
+  },
+  "attributes": {
+    "person": {
+      "plugin": "users-permissions",
+      "configurable": false,
+      "model": "user"
+    },
+    "photo": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images"
+      ],
+      "plugin": "upload",
+      "configurable": false,
+      "required": false
+    },
+    "location": {
+      "configurable": false,
+      "type": "string"
+    },
+    "note": {
+      "configurable": false,
+      "type": "richtext"
+    },
+    "punchIn": {
+      "configurable": false,
+      "type": "datetime"
+    },
+    "punchOut": {
+      "configurable": false,
+      "type": "datetime"
+    }
+  }
+}
