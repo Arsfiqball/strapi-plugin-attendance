@@ -1,17 +1,23 @@
 {
   "name": "strapi-plugin-attendance",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Strapi plugin to track employee attendance",
+  "keywords": [
+    "strapi",
+    "attendance"
+  ],
   "strapi": {
     "name": "Attendance",
     "icon": "user-tag",
     "description": "Track employee attendance"
   },
   "dependencies": {},
+  "homepage": "https://github.com/Arsfiqball/strapi-plugin-attendance",
+  "repository": "github:Arsfiqball/strapi-plugin-attendance",
   "author": {
-    "name": "A Strapi developer",
-    "email": "",
-    "url": ""
+    "name": "Iqbal Mohammad Abdul Ghoni",
+    "email": "iqballmags@gmail.com",
+    "url": "https://arsfiqball.com"
   },
   "maintainers": [
     {
