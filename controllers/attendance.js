@@ -12,14 +12,21 @@ module.exports = {
   async punchList (ctx) {
     const plugin = strapi.plugins.attendance;
     const uid = ctx.state.user.id;
-    const entities = await plugin.models['attendance-record'].find({ person: uid }).limit(40).sort({ _id: -1 });
+
+    const entities = await plugin
+      .models['attendance-record']
+      .find({ person: uid })
+      .limit(40)
+      .sort({ _id: -1 });
+
     ctx.send(entities);
   },
 
   async punchIn (ctx) {
-    const id = ctx.state.user.id;
     const plugin = strapi.plugins.attendance;
     const upload = strapi.plugins.upload.services.upload;
+    const { id, username } = ctx.state.user;
+    const dateString = (new Date()).toDateString();
 
     let data = ctx.request.body;
     let location;
@@ -32,15 +39,21 @@ module.exports = {
     }
 
     if (data.location) {
-      const [lat, long] = data.location.split(',').map(r => Number(r.trim()).toFixed(8));
+      const [lat, long] = data
+        .location
+        .split(',')
+        .map(r => Number(r.trim()).toFixed(8));
+
       location = [lat, long].join(',');
     }
 
-    const entity = await plugin.models['attendance-record'].create({
-      person: id,
-      location,
-      punchIn: new Date()
-    });
+    const entity = await plugin
+      .models['attendance-record']
+      .create({
+        person: id,
+        location,
+        punchIn: new Date()
+      });
 
     if (photo) {
       const uploaded = await upload.upload({
@@ -51,29 +64,44 @@ module.exports = {
           source: 'attendance',
           field: 'photo',
           fileInfo: {
-            name: `Attendance ${ctx.state.user.username} ${(new Date()).toDateString()}`
+            name: `Attendance ${username} ${dateString}`
           }
         }
       });
     }
 
-    return sanitizeEntity(entity, { model: plugin.models['attendance-record'] });
+    return sanitizeEntity(entity, {
+      model: plugin.models['attendance-record']
+    });
   },
 
   async punchOut (ctx) {
+    const plugin = strapi.plugins.attendance;
     const { id } = ctx.params;
     const { note } = ctx.request.body;
-    const plugin = strapi.plugins.attendance;
-    const entity = await plugin.models['attendance-record'].findById(id);
 
-    if (!entity) return ctx.throw(404);
-    if (ctx.state.user.id.toString() !== entity.person.toString()) return ctx.throw(401, 'Wrong person');
-    if (entity.punchOut) return ctx.throw(401, 'Punched out already');
+    const entity = await plugin
+      .models['attendance-record']
+      .findById(id);
+
+    if (!entity) {
+      return ctx.throw(404);
+    }
+
+    if (ctx.state.user.id.toString() !== entity.person.toString()) {
+      return ctx.throw(401, 'Wrong person');
+    }
+
+    if (entity.punchOut) {
+      return ctx.throw(401, 'Punched out already');
+    }
 
     entity.punchOut = new Date();
     entity.note = note;
     await entity.save();
 
-    return sanitizeEntity(entity, { model: plugin.models['attendance-record'] });
+    return sanitizeEntity(entity, {
+      model: plugin.models['attendance-record']
+    });
   }
 };
